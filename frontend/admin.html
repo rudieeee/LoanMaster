@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanMaster Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #3b82f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar h1 {
+            color: #3b82f6;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .navbar .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .navbar .admin-info span {
+            color: #94a3b8;
+        }
+
+        .navbar .admin-badge {
+            background: #3b82f6;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+        }
+
+        .stat-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .stat-card .trend {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .trend.up {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .trend.down {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .panel {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .panel-header h2 {
+            color: #3b82f6;
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #64748b;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-success {
+            background: #10b981;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        table th {
+            padding: 1rem;
+            text-align: left;
+            color: #3b82f6;
+            font-weight: bold;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        table tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .badge-pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .badge-rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .badge-warning {
+            background: rgba(249, 115, 22, 0.2);
+            color: #f97316;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-left: 3px solid #3b82f6;
+            margin-bottom: 1rem;
+            background: rgba(59, 130, 246, 0.05);
+            border-radius: 8px;
+        }
+
+        .activity-item .time {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .activity-item .message {
+            flex: 1;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .quick-action-btn {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-btn .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-bar {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            color: white;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+
+        .blockchain-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.valid {
+            background: #10b981;
+        }
+
+        .status-dot.invalid {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        .tab:hover {
+            color: #3b82f6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #3b82f6;
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <h1>🏦 LoanMaster Admin Dashboard</h1>
+        </div>
+        <div class="admin-info">
+            <span>Welcome, Admin</span>
+            <span class="admin-badge">Super Admin</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon">📊</div>
+                <h3 id="totalApplications">0</h3>
+                <p>Total Applications</p>
+                <span class="trend up">↑ 12% this week</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">✅</div>
+                <h3 id="approvedLoans">0</h3>
+                <p>Approved Loans</p>
+                <span class="trend up">↑ 8% this week</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">💰</div>
+                <h3 id="totalAmount">₹0</h3>
+                <p>Total Disbursed</p>
+                <span class="trend up">↑ 15% this month</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">⛓️</div>
+                <h3 id="blockchainBlocks">0</h3>
+                <p>Blockchain Records</p>
+                <span class="trend up">↑ Real-time</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">🚨</div>
+                <h3 id="fraudDetected">0</h3>
+                <p>Fraud Detected</p>
+                <span class="trend down">↓ 3% this week</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">⚡</div>
+                <h3 id="approvalRate">92%</h3>
+                <p>Approval Rate</p>
+                <span class="trend up">↑ Industry Leading</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Recent Applications Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>📋 Recent Loan Applications</h2>
+                    <div>
+                        <button class="btn btn-secondary" onclick="refreshApplications()">🔄 Refresh</button>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="filterApplications('all')">All</button>
+                    <button class="tab" onclick="filterApplications('pending')">Pending</button>
+                    <button class="tab" onclick="filterApplications('approved')">Approved</button>
+                    <button class="tab" onclick="filterApplications('rejected')">Rejected</button>
+                </div>
+
+                <input type="text" class="search-bar" placeholder="🔍 Search by Customer ID, Name, or Amount..." id="searchInput">
+
+                <div style="overflow-x: auto;">
+                    <table id="applicationsTable">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Credit Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicationsBody">
+                            <tr>
+                                <td colspan="6" class="loading">Loading applications...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Activity Feed Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>📡 Live Activity Feed</h2>
+                </div>
+                <div id="activityFeed">
+                    <div class="activity-item">
+                        <div class="time">Just now</div>
+                        <div class="message">
+                            <strong>System Ready</strong><br>
+                            <small>Dashboard initialized successfully</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blockchain & Quick Actions -->
+        <div class="dashboard-grid">
+            <!-- Blockchain Status -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>⛓️ Blockchain Status</h2>
+                    <button class="btn" onclick="window.open('/frontend/blockchain.html', '_blank')">View Explorer</button>
+                </div>
+                <div class="blockchain-status">
+                    <div class="status-dot valid"></div>
+                    <span>Blockchain is Valid & Operational</span>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <p><strong>Total Blocks:</strong> <span id="totalBlocks">0</span></p>
+                    <p><strong>KYC Records:</strong> <span id="kycRecords">0</span></p>
+                    <p><strong>Loan Records:</strong> <span id="loanRecords">0</span></p>
+                    <p><strong>Chain Integrity:</strong> <span class="badge-success badge">✓ Valid</span></p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>⚡ Quick Actions</h2>
+                </div>
+                <div class="quick-actions">
+                    <div class="quick-action-btn" onclick="window.open('/frontend/chat.html', '_blank')">
+                        <div class="icon">💬</div>
+                        <div>Open Chat</div>
+                    </div>
+                    <div class="quick-action-btn" onclick="window.open('/frontend/graphs.html', '_blank')">
+                        <div class="icon">📊</div>
+                        <div>Analytics</div>
+                    </div>
+                    <div class="quick-action-btn" onclick="window.open('/frontend/blockchain.html', '_blank')">
+                        <div class="icon">⛓️</div>
+                        <div>Blockchain</div>
+                    </div>
+                    <div class="quick-action-btn" onclick="exportReport()">
+                        <div class="icon">📥</div>
+                        <div>Export Report</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Application Details -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Application Details</h3>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalBody">
+                <!-- Details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for demo
+        const mockApplications = [
+            {
+                id: "12345",
+                name: "Rajesh Kumar",
+                amount: 500000,
+                creditScore: 750,
+                status: "approved",
+                email: "rajesh.kumar@email.com",
+                phone: "9876543210",
+                timestamp: new Date().toISOString()
+            },
+            {
+                id: "67890",
+                name: "Priya Sharma",
+                amount: 800000,
+                creditScore: 820,
+                status: "approved",
+                email: "priya.sharma@email.com",
+                phone: "9123456789",
+                timestamp: new Date().toISOString()
+            },
+            {
+                id: "11111",
+                name: "Amit Patel",
+                amount: 300000,
+                creditScore: 680,
+                status: "pending",
+                email: "amit.patel@email.com",
+                phone: "9988776655",
+                timestamp: new Date().toISOString()
+            },
+            {
+                id: "22222",
+                name: "Sneha Reddy",
+                amount: 1000000,
+                creditScore: 850,
+                status: "approved",
+                email: "sneha.reddy@email.com",
+                phone: "9887766554",
+                timestamp: new Date().toISOString()
+            },
+            {
+                id: "77777",
+                name: "Arjun Mehta",
+                amount: 150000,
+                creditScore: 630,
+                status: "rejected",
+                email: "arjun.mehta@email.com",
+                phone: "9332211009",
+                timestamp: new Date().toISOString()
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        // Initialize dashboard
+        async function initDashboard() {
+            updateStatistics();
+            loadApplications();
+            loadBlockchainStats();
+            startActivityFeed();
+        }
+
+        function updateStatistics() {
+            // Update stat cards
+            document.getElementById('totalApplications').textContent = mockApplications.length;
+            document.getElementById('approvedLoans').textContent = mockApplications.filter(a => a.status === 'approved').length;
+            
+            const totalAmount = mockApplications
+                .filter(a => a.status === 'approved')
+                .reduce((sum, a) => sum + a.amount, 0);
+            document.getElementById('totalAmount').textContent = `₹${(totalAmount / 100000).toFixed(1)}L`;
+            
+            document.getElementById('fraudDetected').textContent = mockApplications.filter(a => a.status === 'rejected').length;
+        }
+
+        function loadApplications() {
+            const tbody = document.getElementById('applicationsBody');
+            tbody.innerHTML = '';
+
+            const filtered = currentFilter === 'all' 
+                ? mockApplications 
+                : mockApplications.filter(a => a.status === currentFilter);
+
+            filtered.forEach(app => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${app.id}</td>
+                    <td>${app.name}</td>
+                    <td>₹${(app.amount / 100000).toFixed(2)}L</td>
+                    <td>${app.creditScore}</td>
+                    <td><span class="badge badge-${app.status === 'approved' ? 'success' : app.status === 'pending' ? 'pending' : 'rejected'}">${app.status.toUpperCase()}</span></td>
+                    <td>
+                        <button class="btn" onclick="viewDetails('${app.id}')" style="padding: 0.35rem 0.75rem; font-size: 0.85rem;">View</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function loadBlockchainStats() {
+            try {
+                const response = await fetch('/api/blockchain/stats');
+                const stats = await response.json();
+                
+                document.getElementById('totalBlocks').textContent = stats.total_blocks;
+                document.getElementById('blockchainBlocks').textContent = stats.total_blocks;
+                document.getElementById('kycRecords').textContent = stats.kyc_records;
+                document.getElementById('loanRecords').textContent = stats.loan_applications;
+            } catch (error) {
+                console.error('Error loading blockchain stats:', error);
+                // Use mock data
+                document.getElementById('totalBlocks').textContent = '150';
+                document.getElementById('blockchainBlocks').textContent = '150';
+                document.getElementById('kycRecords').textContent = '85';
+                document.getElementById('loanRecords').textContent = '65';
+            }
+        }
+
+        function filterApplications(filter) {
+            currentFilter = filter;
+            
+            // Update tab active state
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            loadApplications();
+        }
+
+        function viewDetails(customerId) {
+            const app = mockApplications.find(a => a.id === customerId);
+            if (!app) return;
+
+            const modal = document.getElementById('detailsModal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div style="line-height: 2;">
+                    <p><strong>Customer ID:</strong> ${app.id}</p>
+                    <p><strong>Name:</strong> ${app.name}</p>
+                    <p><strong>Email:</strong> ${app.email}</p>
+                    <p><strong>Phone:</strong> ${app.phone}</p>
+                    <p><strong>Loan Amount:</strong> ₹${app.amount.toLocaleString()}</p>
+                    <p><strong>Credit Score:</strong> ${app.creditScore}</p>
+                    <p><strong>Status:</strong> <span class="badge badge-${app.status === 'approved' ? 'success' : app.status === 'pending' ? 'pending' : 'rejected'}">${app.status.toUpperCase()}</span></p>
+                    <p><strong>Applied On:</strong> ${new Date(app.timestamp).toLocaleString()}</p>
+                </div>
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-success" onclick="approveApplication('${app.id}')">✓ Approve</button>
+                    <button class="btn btn-danger" onclick="rejectApplication('${app.id}')">✗ Reject</button>
+                    <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').classList.remove('active');
+        }
+
+        function approveApplication(customerId) {
+            addActivity(`Loan approved for customer ${customerId}`);
+            closeModal();
+            // Refresh applications
+            setTimeout(() => {
+                alert('Loan approved successfully!');
+                loadApplications();
+            }, 500);
+        }
+
+        function rejectApplication(customerId) {
+            addActivity(`Loan rejected for customer ${customerId}`);
+            closeModal();
+            setTimeout(() => {
+                alert('Loan rejected.');
+                loadApplications();
+            }, 500);
+        }
+
+        function refreshApplications() {
+            document.getElementById('applicationsBody').innerHTML = '<tr><td colspan="6" class="loading">Refreshing...</td></tr>';
+            setTimeout(() => {
+                loadApplications();
+                addActivity('Applications refreshed');
+            }, 1000);
+        }
+
+        function exportReport() {
+            addActivity('Report export initiated');
+            alert('Report exported successfully! (Demo)');
+        }
+
+        function addActivity(message) {
+            const feed = document.getElementById('activityFeed');
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.innerHTML = `
+                <div class="time">${new Date().toLocaleTimeString()}</div>
+                <div class="message">
+                    <strong>${message}</strong><br>
+                    <small>Admin action</small>
+                </div>
+            `;
+            feed.insertBefore(item, feed.firstChild);
+            
+            // Keep only last 5 activities
+            while (feed.children.length > 5) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+
+        function startActivityFeed() {
+            // Simulate real-time activity
+            const activities = [
+                'New loan application received',
+                'KYC verification completed',
+                'Credit score updated',
+                'Blockchain record added',
+                'Loan disbursement processed'
+            ];
+            
+            setInterval(() => {
+                const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+                addActivity(randomActivity);
+            }, 10000); // Add activity every 10 seconds
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const search = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#applicationsTable tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', initDashboard);
+
+        // Auto-refresh stats every 30 seconds
+        setInterval(() => {
+            loadBlockchainStats();
+        }, 30000);
+    </script>
+</body>
+</html>

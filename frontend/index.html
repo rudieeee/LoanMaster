@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanMaster - Your Intelligent Loan Assistant</title>
+    <link rel="stylesheet" href="/frontend/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏦</text></svg>"
+</head>
+<body>
+    <div class="landing-page" id="landing">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-university"></i>
+                LoanMaster
+            </div>
+            <button class="chat-toggle-btn" onclick="window.location.href='/frontend/chat.html'">
+                <i class="fas fa-comments"></i> Start Chat
+            </button>
+        </nav>
+
+        <div class="hero-section">
+            <h1>LoanMaster</h1>
+            <div class="tagline">Your Intelligent Loan Assistant</div>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <span>Instant Loan Assessment</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Documentation</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-clock"></i>
+                    <span>24/7 Assistance</span>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>Why Choose LoanMaster?</h2>
+                <p>LoanMaster combines cutting-edge AI technology with banking expertise to provide you with the most intelligent and personalized loan assistance. Our platform streamlines the entire loan process, from application to approval, making it faster and more efficient than ever before.</p>
+                
+                <div class="benefits">
+                    <div class="benefit">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Smart Analysis</h3>
+                        <p>Advanced AI analyzes your profile for the best loan options</p>
+                    </div>
+                    <div class="benefit">
+                        <i class="fas fa-file-signature"></i>
+                        <h3>Digital Documentation</h3>
+                        <p>Upload and manage documents securely online</p>
+                    </div>
+                    <div class="benefit">
+                        <i class="fas fa-percentage"></i>
+                        <h3>Competitive Rates</h3>
+                        <p>Get access to the best interest rates available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Made with <i class="fas fa-heart"></i> by Team Power Rangers
+        </footer>
+    </div>
+
+    <div class="chat-container" id="chat" style="display: none;">
+        <div class="chat-header">
+            <div class="header-content">
+                <i class="fas fa-robot"></i>
+                <div>
+                    <h2>LoanMaster Assistant</h2>
+                    <p class="status"><span class="status-dot"></span> Online</p>
+                </div>
+            </div>
+            <div class="chat-controls">
+                <button class="control-btn" onclick="toggleDocUpload()">
+                    <i class="fas fa-file-upload"></i>
+                </button>
+                <button class="control-btn" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="messages">
+            <div class="message ai-message">
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Hi there! 👋 I'm Sarah, your personal LoanMaster assistant. I'm here to help you with all your loan-related needs. How can I assist you today?
+                    </div>
+                </div>
+                <div class="message-time">Just now</div>
+            </div>
+        </div>
+        
+        <div class="doc-upload-section" id="docUpload" style="display: none;">
+            <div class="upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & Drop files here or click to upload</p>
+                <input type="file" id="fileInput" multiple hidden>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <div class="input-group">
+                <input type="text" id="messageInput" placeholder="Type your message..." />
+                <button id="sendButton">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="sendQuickMessage('I need a personal loan')">Personal Loan</button>
+            <button class="quick-btn" onclick="sendQuickMessage('What documents do I need?')">Required Documents</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Current interest rates')">Interest Rates</button>
+        </div>
+    </div>
+    
+    <script src="/frontend/script.js"></script>
+</body>
+</html>

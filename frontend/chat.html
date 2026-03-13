@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - LoanMaster</title>
+    <link rel="stylesheet" href="/frontend/chat.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏦</text></svg>">
+</head>
+<body>
+    <div class="chat-page">
+        <div class="chat-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                    <span>LoanMaster</span>
+                </div>
+                <a href="/frontend/index.html" class="back-btn">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+            
+            <div class="agent-info">
+                <div class="agent-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="agent-details">
+                    <h3>Sarah</h3>
+                    <p>Your AI Assistant</p>
+                    <div class="agent-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Online</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-actions">
+                <button class="action-btn" onclick="toggleDocUpload()">
+                    <i class="fas fa-file-upload"></i>
+                    <span>Upload Documents</span>
+                </button>
+                <button class="action-btn" onclick="clearChat()">
+                    <i class="fas fa-trash"></i>
+                    <span>Clear Chat</span>
+                </button>
+                <button class="action-btn" onclick="downloadChat()">
+                    <i class="fas fa-download"></i>
+                    <span>Download Chat</span>
+                </button>
+            </div>
+            
+            <div class="quick-options">
+                <h4>Quick Actions</h4>
+                <button class="quick-option" onclick="sendQuickMessage('I need a personal loan')">
+                    <i class="fas fa-money-bill-wave"></i> Personal Loan
+                </button>
+                <button class="quick-option" onclick="sendQuickMessage('What documents do I need?')">
+                    <i class="fas fa-file-alt"></i> Required Documents
+                </button>
+                <button class="quick-option" onclick="sendQuickMessage('What are the current interest rates?')">
+                    <i class="fas fa-percentage"></i> Interest Rates
+                </button>
+                <button class="quick-option" onclick="sendQuickMessage('How do I check my loan status?')">
+                    <i class="fas fa-search"></i> Check Status
+                </button>
+            </div>
+        </div>
+        
+        <div class="chat-main">
+            <div class="chat-header">
+                <div class="header-left">
+                    <h2>Chat with Sarah</h2>
+                    <p>I'm here to help you with all your loan needs</p>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" onclick="toggleDocUpload()" title="Upload Documents">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="icon-btn" onclick="toggleSettings()" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="messages">
+                <div class="message ai-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            Hi there! 👋 I'm Sarah, your personal LoanMaster assistant. I'm here to help you with:
+                            <ul>
+                                <li>Personal loan applications</li>
+                                <li>Document verification</li>
+                                <li>Interest rate information</li>
+                                <li>Loan status tracking</li>
+                                <li>General loan inquiries</li>
+                            </ul>
+                            How can I assist you today?
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="doc-upload-section" id="docUpload" style="display: none;">
+                <div class="upload-container">
+                    <div class="upload-header">
+                        <h3><i class="fas fa-cloud-upload-alt"></i> Upload Documents</h3>
+                        <button class="close-upload" onclick="toggleDocUpload()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & Drop files here or click to upload</p>
+                        <span class="upload-hint">Supported: PDF, JPG, PNG (Max 10MB)</span>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png" hidden>
+                    </div>
+                    <div class="uploaded-files" id="uploadedFiles"></div>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <button class="emoji-btn" onclick="toggleEmojiPicker()">
+                        <i class="fas fa-smile"></i>
+                    </button>
+                    <input type="text" id="messageInput" placeholder="Type your message here..." autocomplete="off">
+                    <button class="attach-btn" onclick="toggleDocUpload()">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="send-btn" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/frontend/chat.js"></script>
+</body>
+</html>
